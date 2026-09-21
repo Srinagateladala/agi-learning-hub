@@ -1,3 +1,1 @@
-document.getElementById("startBtn").addEventListener("click", () => {
-  alert("AGI Learning Hub is starting soon! 🚀");
-});
+document.querySelectorAll('a[href^="#"]').forEach(link=>{link.addEventListener('click',e=>{const t=document.querySelector(link.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}});});
