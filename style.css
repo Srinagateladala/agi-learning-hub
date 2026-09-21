@@ -1,0 +1,9 @@
+* { box-sizing: border-box; }
+body { margin:0; font-family:Arial,sans-serif; background:#f5f7fb; color:#172033; }
+header { padding:28px 20px; text-align:center; background:#172033; color:white; }
+header h1 { margin:0 0 8px; } header p { margin:0; }
+main { padding:40px 20px; }
+.hero { max-width:800px; margin:auto; padding:40px 24px; text-align:center; background:white; border-radius:18px; box-shadow:0 8px 30px rgba(0,0,0,.08); }
+.hero h2 { font-size:32px; margin-top:0; }
+button { border:0; padding:14px 22px; border-radius:10px; background:#172033; color:white; font-size:16px; cursor:pointer; }
+footer { padding:20px; text-align:center; color:#667085; }
