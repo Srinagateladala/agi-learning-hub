@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="AGI Learning Hub AI Tutor — a local API-ready learning assistant demo.">
+<title>AGI Learning Hub — AI Tutor</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="nav">
+<a class="brand" href="index.html#top">AGI<span>Hub</span></a>
+<button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu">☰</button>
+<nav id="siteNav"><a href="index.html#dashboard">Dashboard</a><a href="index.html#roadmap">Roadmap</a><a href="projects.html">Projects</a><a href="tutor.html">AI Tutor</a><a href="quiz.html">Quiz Generator</a><a href="index.html#about">About</a><a href="api.html">API</a></nav>
+</header>
+<main class="tutor-page">
+<section class="lesson-hero">
+<span class="tutor-kicker">STEP 38 · AI TUTOR</span>
+<h1>Your AI Learning Tutor</h1>
+<p>Ask questions about AI, ML, LLMs, RAG, agents, or AGI and get a guided learning response.</p>
+</section>
+
+<section class="section" style="padding-top:0">
+<div class="tutor-shell">
+<div class="tutor-card tutor-chat">
+<div id="tutorMessages" class="tutor-messages" aria-live="polite">
+<div class="tutor-msg bot">Hi! I’m the AGIHub Tutor demo. Ask me an AI learning question, or choose a topic below.</div>
+</div>
+<div class="tutor-suggestions">
+<button class="tutor-suggestion" data-question="What is AI?"><span>What is AI?</span></button>
+<button class="tutor-suggestion" data-question="Explain machine learning simply."><span>Explain ML</span></button>
+<button class="tutor-suggestion" data-question="What is an LLM?"><span>What is an LLM?</span></button>
+<button class="tutor-suggestion" data-question="What is RAG?"><span>What is RAG?</span></button>
+<button class="tutor-suggestion" data-question="What are AI agents?"><span>AI Agents</span></button>
+</div>
+<div class="tutor-input-row">
+<input id="tutorInput" class="tutor-input" type="text" placeholder="Ask a learning question..." autocomplete="off">
+<button id="tutorSend" class="tutor-send" type="button">Ask Tutor</button>
+</div>
+<div id="tutorStatus" class="tutor-status">Local demo mode · no API call</div>
+</div>
+
+<aside class="tutor-card tutor-side">
+<h3>🎓 Tutor Topics</h3>
+<p>Use these topics to jump-start your questions.</p>
+<div class="tutor-topic-list">
+<button class="tutor-topic" data-question="Teach me AI fundamentals step by step.">AI Fundamentals</button>
+<button class="tutor-topic" data-question="Teach me supervised and unsupervised learning.">Machine Learning</button>
+<button class="tutor-topic" data-question="Explain neural networks and deep learning.">Deep Learning</button>
+<button class="tutor-topic" data-question="Explain transformers and LLMs.">LLMs</button>
+<button class="tutor-topic" data-question="Explain retrieval augmented generation.">RAG</button>
+<button class="tutor-topic" data-question="Explain how an AI agent works.">AI Agents</button>
+<button class="tutor-topic" data-question="Explain AGI and the major research challenges.">AGI</button>
+</div>
+<div class="tutor-note"><strong>Step 38 status:</strong> This version is a free local tutor demo. It does not require an OpenAI API key or paid API credits. The interface is API-ready for a later backend integration.</div>
+<button id="tutorClear" class="tutor-clear" type="button">Clear chat</button>
+</aside>
+</div>
+</section>
+</main>
+<footer>Step 38 · AI Tutor · AGI Learning Hub</footer>
+<script>
+const messages = document.getElementById('tutorMessages');
+const input = document.getElementById('tutorInput');
+const send = document.getElementById('tutorSend');
+const status = document.getElementById('tutorStatus');
+const clearBtn = document.getElementById('tutorClear');
+
+function addMessage(text, type){
+  const el=document.createElement('div');
+  el.className='tutor-msg '+type;
+  el.textContent=text;
+  messages.appendChild(el);
+  messages.scrollTop=messages.scrollHeight;
+}
+
+function tutorReply(q){
+  const x=q.toLowerCase();
+  if(x.includes('what is ai') || x.includes('artificial intelligence')) return 'AI is the field of building systems that can perform tasks that normally require human-like capabilities such as perception, reasoning, learning, planning, and language use. Start with AI fundamentals, then learn ML and deep learning.';
+  if(x.includes('machine learning') || x.includes('supervised') || x.includes('unsupervised') || x.includes('ml')) return 'Machine learning lets a system learn patterns from data instead of relying only on hand-written rules. Supervised learning uses labeled examples; unsupervised learning looks for structure in unlabeled data. A useful next step is training vs testing data and model evaluation.';
+  if(x.includes('llm') || x.includes('transformer')) return 'An LLM is a language model trained on large amounts of text to predict and generate tokens. Modern LLMs commonly use transformer architectures. Learn tokens → embeddings → attention → transformers → pretraining → instruction tuning → evaluation.';
+  if(x.includes('rag') || x.includes('retrieval')) return 'RAG combines retrieval with generation: first retrieve relevant information from a knowledge source, then provide that context to a language model to produce an answer. Typical pieces are chunking, embeddings, vector search, retrieval, prompt construction, and evaluation.';
+  if(x.includes('agent')) return 'An AI agent is a system that can use a model together with tools, memory, planning, and an execution loop to accomplish a task. A practical learning path is tool calling → memory → planning → evaluation → multi-agent workflows.';
+  if(x.includes('agi') || x.includes('general intelligence')) return 'AGI is commonly used for a hypothetical AI system with broad, general capabilities across many tasks rather than narrow specialization. Research challenges often discussed include robust reasoning, planning, memory, continual learning, world models, transfer, autonomy, and safety.';
+  if(x.includes('deep learning') || x.includes('neural network')) return 'Deep learning uses multi-layer neural networks to learn representations from data. Start with tensors and datasets, then neural-network basics, backpropagation, optimization, CNNs, sequence models, and transformers.';
+  return 'Good question. For the current free tutor demo, try asking about AI, machine learning, deep learning, LLMs, RAG, AI agents, or AGI. Step 38 is designed so a real model API can be connected later without changing the overall tutor UI.';
+}
+
+function ask(question){
+  const q=(question||'').trim();
+  if(!q) return;
+  addMessage(q,'user');
+  input.value='';
+  status.textContent='Generating local tutor response...';
+  setTimeout(()=>{ addMessage(tutorReply(q),'bot'); status.textContent='Local demo mode · no API call'; },250);
+}
+
+send.addEventListener('click',()=>ask(input.value));
+input.addEventListener('keydown',e=>{if(e.key==='Enter') ask(input.value);});
+document.querySelectorAll('[data-question]').forEach(btn=>btn.addEventListener('click',()=>ask(btn.dataset.question)));
+clearBtn.addEventListener('click',()=>{messages.innerHTML='<div class="tutor-msg bot">Chat cleared. Ask me a new AI learning question.</div>';status.textContent='Local demo mode · no API call';});
+
+document.getElementById('menuToggle').addEventListener('click',()=>document.getElementById('siteNav').classList.toggle('open'));
+</script>
+<script src="ui.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

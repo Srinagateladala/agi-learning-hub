@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="AGI Learning Hub API integration setup and safe demo mode.">
+<title>AGI Learning Hub — API Integration</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="nav">
+<a class="brand" href="index.html">AGI<span>Hub</span></a>
+<button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu">☰</button>
+<nav id="siteNav"><a href="index.html#dashboard">Dashboard</a><a href="index.html#roadmap">Roadmap</a><a href="projects.html">Projects</a><a href="tutor.html">AI Tutor</a><a href="quiz.html">Quiz Generator</a><a href="assistant.html">Learning Assistant</a><a class="active" href="api.html">API</a><a href="index.html#about">About</a></nav>
+</header>
+<main>
+<section class="hero"><span>STEP 41 · API INTEGRATION</span><h1>Connect AI <em>safely.</em></h1><p>Prepare the Learning Hub for a real AI backend without putting a secret API key inside the website.</p></section>
+<section class="section">
+<div class="content-card">
+<h2>🔌 Current API status</h2>
+<p id="apiStatus">Checking…</p>
+<div class="api-badge" id="apiBadge">DEMO MODE</div>
+</div>
+<div class="content-card">
+<h2>What Step 41 adds</h2>
+<ul>
+<li>A reusable <code>api.js</code> integration layer.</li>
+<li>Demo mode that works without API credits.</li>
+<li>A backend endpoint adapter for a future secure server.</li>
+<li>No API key is stored in this browser project.</li>
+</ul>
+</div>
+<div class="content-card">
+<h2>⚠️ Security rule</h2>
+<p>Do not paste an OpenAI or other private API key into <code>index.html</code>, <code>tutor.html</code>, <code>quiz.html</code>, or <code>api.js</code>. A production app should keep secrets on a server-side/backend environment.</p>
+</div>
+<div class="content-card">
+<h2>Next connection path</h2>
+<ol>
+<li>Keep the website in demo mode for now.</li>
+<li>Later create a secure backend endpoint.</li>
+<li>Store the provider secret only in the backend environment.</li>
+<li>Connect Tutor, Quiz Generator, and Learning Assistant through that backend.</li>
+<li>Add loading, error, timeout, and usage handling.</li>
+</ol>
+</div>
+</section>
+</main>
+<footer>🧠 AGI Learning Hub · Step 41 · API Integration</footer>
+<script src="api.js"></script>
+<script>
+const status = document.getElementById('apiStatus');
+const badge = document.getElementById('apiBadge');
+const ready = window.AGIAPI.status() === 'backend-ready';
+status.textContent = ready ? 'Backend endpoint configured.' : 'Demo mode active — no backend endpoint configured.';
+badge.textContent = ready ? 'BACKEND READY' : 'DEMO MODE';
+const toggle=document.getElementById('menuToggle'), nav=document.getElementById('siteNav');
+if(toggle&&nav) toggle.addEventListener('click',()=>nav.classList.toggle('open'));
+</script>
+<script src="ui.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

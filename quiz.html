@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="AGI Learning Hub AI Quiz Generator — a free local quiz generator demo.">
+<title>AGI Learning Hub — AI Quiz Generator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="nav">
+<a class="brand" href="index.html#top">AGI<span>Hub</span></a>
+<button class="menu-toggle" id="menuToggle" type="button" aria-label="Open menu">☰</button>
+<nav id="siteNav"><a href="index.html#dashboard">Dashboard</a><a href="index.html#roadmap">Roadmap</a><a href="projects.html">Projects</a><a href="tutor.html">AI Tutor</a><a href="quiz.html">Quiz Generator</a><a href="index.html#about">About</a><a href="api.html">API</a></nav>
+</header>
+<main class="quiz-generator-page">
+<section class="lesson-hero">
+<span class="quizgen-kicker">STEP 39 · AI QUIZ GENERATOR</span>
+<h1>Generate Your AI Quiz</h1>
+<p>Choose a topic and difficulty, then generate a practice quiz from the local question bank.</p>
+</section>
+
+<section class="section" style="padding-top:0">
+<div class="quizgen-shell">
+<div class="quizgen-card">
+<h2>⚙️ Quiz Settings</h2>
+<div class="quizgen-grid">
+<label>Topic<select id="quizTopic"><option value="mixed">Mixed AI</option><option value="ai">AI Fundamentals</option><option value="ml">Machine Learning</option><option value="dl">Deep Learning</option><option value="llm">LLMs</option><option value="rag">RAG</option><option value="agents">AI Agents</option><option value="agi">AGI</option></select></label>
+<label>Difficulty<select id="quizDifficulty"><option value="easy">Easy</option><option value="medium">Medium</option><option value="hard">Hard</option></select></label>
+<label>Questions<select id="quizCount"><option value="5">5</option><option value="8">8</option><option value="10">10</option></select></label>
+</div>
+<button id="generateQuiz" class="quizgen-generate" type="button">Generate Quiz</button>
+<div id="quizGenStatus" class="quizgen-status">Local question bank · no API call</div>
+</div>
+
+<div id="quizArea" class="quizgen-card quizgen-output">
+<div class="quizgen-empty">🎯 Select your settings and tap <strong>Generate Quiz</strong> to begin.</div>
+</div>
+</div>
+</section>
+</main>
+<footer>Step 39 · AI Quiz Generator · AGI Learning Hub</footer>
+<script>
+const bank={
+ ai:[
+  ['What is AI primarily concerned with?',['Building systems that perform tasks requiring intelligent behavior','Only storing large datasets','Designing computer hardware','Replacing all software'],0],
+  ['Which is an example of AI?',['A rule-based intelligent assistant','A USB cable','A computer monitor','A keyboard'],0],
+  ['What is a common AI capability?',['Reasoning or learning from data','Only printing documents','Only increasing storage','Only changing screen brightness'],0]
+ ],
+ ml:[
+  ['What does machine learning allow a model to do?',['Learn patterns from data','Only follow fixed hardware circuits','Avoid using data','Only render graphics'],0],
+  ['What does supervised learning use?',['Labeled examples','No examples at all','Only random numbers','Only images without labels'],0],
+  ['Why is a test set used?',['To evaluate performance on held-out data','To train the model forever','To increase the file size','To replace the training set'],0],
+  ['Which is a classification task?',['Predicting whether an email is spam','Predicting tomorrow’s exact temperature only','Compressing a video','Sorting files by name'],0]
+ ],
+ dl:[
+  ['Deep learning is mainly based on what?',['Multi-layer neural networks','Spreadsheet formulas','Database indexes','Web page layouts'],0],
+  ['What is backpropagation used for?',['Computing gradients for learning model parameters','Compressing images','Creating database tables','Opening web pages'],0],
+  ['What is an activation function used for?',['Introducing non-linearity into a neural network','Deleting training data','Encrypting a hard drive','Increasing monitor resolution'],0]
+ ],
+ llm:[
+  ['What does LLM stand for?',['Large Language Model','Long Logic Machine','Language Learning Module','Large Linear Memory'],0],
+  ['What is a token in an LLM context?',['A unit of text processed by the model','A GPU cable','A database password','A web browser'],0],
+  ['Which architecture is central to modern LLMs?',['Transformer','BIOS','File system','Spreadsheet'],0],
+  ['What does attention help a transformer do?',['Model relationships between tokens','Increase disk capacity','Install an operating system','Replace the CPU'],0]
+ ],
+ rag:[
+  ['What does RAG stand for?',['Retrieval-Augmented Generation','Random AI Generation','Recursive Agent Graph','Realtime Answer Generator'],0],
+  ['What happens first in a typical RAG pipeline?',['Relevant information is retrieved','The final answer is deleted','The GPU is replaced','The user is logged out'],0],
+  ['Why are embeddings useful in RAG?',['They represent content as vectors for similarity search','They encrypt every document','They replace the language model','They create user passwords'],0]
+ ],
+ agents:[
+  ['What makes an AI agent different from a simple single response?',['It can use tools and an execution loop to pursue a task','It must always be offline','It cannot use memory','It only generates images'],0],
+  ['What is tool calling?',['Allowing a model to invoke an external function or service','Calling a human on the phone','Changing the monitor','Deleting prompts'],0],
+  ['Why can memory be useful for agents?',['It can preserve relevant information across interactions','It guarantees perfect reasoning','It removes the need for tools','It prevents evaluation'],0]
+ ],
+ agi:[
+  ['AGI is commonly discussed as what kind of system?',['A system with broad general capabilities across many tasks','A database engine','A graphics format','A network cable'],0],
+  ['Which is a commonly discussed AGI research challenge?',['Robust reasoning and planning','Changing keyboard layouts','Increasing screen size','Compressing ZIP files'],0],
+  ['What is continual learning?',['Learning or adapting over time without simply resetting the whole system','Deleting all previous knowledge','Only learning once','Only changing the UI'],0]
+ ],
+ mixed:[]
+};
+bank.mixed=Object.values(bank).filter((v)=>Array.isArray(v)&&v!==bank.mixed).flat();
+let current=[];
+const area=document.getElementById('quizArea');
+const status=document.getElementById('quizGenStatus');
+function shuffle(a){return [...a].sort(()=>Math.random()-0.5);}
+function generate(){
+ const topic=document.getElementById('quizTopic').value;
+ const difficulty=document.getElementById('quizDifficulty').value;
+ const count=Number(document.getElementById('quizCount').value);
+ const pool=shuffle(bank[topic]);
+ current=pool.slice(0,Math.min(count,pool.length));
+ if(!current.length){status.textContent='No questions available.';return;}
+ AGIUI.success('Quiz generated'); area.innerHTML='<div class="quizgen-head"><div><span>GENERATED QUIZ</span><h2>'+topic.toUpperCase()+' · '+difficulty.toUpperCase()+'</h2></div><div class="quizgen-count">'+current.length+' questions</div></div>' + current.map((q,i)=>'<fieldset class="quizgen-question"><legend>'+ (i+1)+'. '+q[0]+'</legend>'+shuffle(q[1].map((text,j)=>({text,index:j}))).map((o,k)=>'<label class="quizgen-option"><input type="radio" name="q'+i+'" value="'+o.index+'"> '+o.text+'</label>').join('')+'<div class="quizgen-feedback" id="feedback'+i+'"></div></fieldset>').join('') + '<button id="submitQuiz" class="quizgen-submit" type="button">Submit Quiz</button><div id="quizResult" class="quizgen-result"></div>' ;
+ document.getElementById('submitQuiz').addEventListener('click',grade);
+ status.textContent='Local demo mode · no API call · '+difficulty+' practice';
+}
+function grade(){
+ let score=0; current.forEach((q,i)=>{const picked=document.querySelector('input[name="q'+i+'"]:checked');const box=document.getElementById('feedback'+i); if(picked && Number(picked.value)===q[2]){score++;box.textContent='✓ Correct';box.className='quizgen-feedback correct';}else{box.textContent='✗ Correct answer: '+q[1][q[2]];box.className='quizgen-feedback wrong';}});
+ const pct=Math.round(score/current.length*100); const result=document.getElementById('quizResult'); AGIUI.success('Quiz checked'); result.textContent='Score: '+score+'/'+current.length+' ('+pct+'%). Review the explanations above and try another quiz.'; result.classList.add('show'); result.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+document.getElementById('generateQuiz').addEventListener('click',generate);
+document.getElementById('menuToggle').addEventListener('click',()=>document.getElementById('siteNav').classList.toggle('open'));
+</script>
+<script src="ui.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
